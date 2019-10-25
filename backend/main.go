@@ -1,13 +1,13 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "net/http"
-    "strconv"
+	"fmt"
+	"log"
+	"net/http"
+	"strconv"
 )
 
-func login_thompson(w http.ResponseWriter, r *http.Request) {
+func l4_login_thompson(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("user") != "ken" {
 		http.Error(w, "Unknown user", 403)
 		return
@@ -16,10 +16,10 @@ func login_thompson(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Wrong password", 403)
 		return
 	}
-    fmt.Fprint(w, "Welcome, Ken Thompson. The password for level 5 is YVdWMk5ObGxEeWt0amt3bElmdnU1M2pJQm1Jb2NSU2I=")
+	fmt.Fprint(w, "Welcome, Ken Thompson. The password for level 5 is YVdWMk5ObGxEeWt0amt3bElmdnU1M2pJQm1Jb2NSU2I=")
 }
 
-func viewprofile(w http.ResponseWriter, r *http.Request) {
+func l5_viewprofile(w http.ResponseWriter, r *http.Request) {
 	user, err := strconv.Atoi(r.FormValue("user"))
 	if err != nil {
 		http.Error(w, "Could not parse user number.", 403)
@@ -38,9 +38,15 @@ func viewprofile(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func l6_login_wa(w http.ResponseWriter, r *http.Request) {
+	//user := r.FormValue("user")
+	//password := r.FormValue("password")
+}
+
 func main() {
-    http.HandleFunc("/level4/MHjgkjTp0APwXa50BnqItTJ36EHdLjkU/login.go", login_thompson)
-    http.HandleFunc("/level5/aWV2NNllDyktjkwlIfvu53jIBmIocRSb/viewprofile.go", viewprofile)
-    log.Println("Starting backend...")
-    log.Fatal(http.ListenAndServe(":8081", nil))
+	http.HandleFunc("/level4/MHjgkjTp0APwXa50BnqItTJ36EHdLjkU/login.go", l4_login_thompson)
+	http.HandleFunc("/level5/aWV2NNllDyktjkwlIfvu53jIBmIocRSb/viewprofile.go", l5_viewprofile)
+	http.HandleFunc("/level6/vvJBa5GqajeBGhyUczJVPIYyOtlWtTd3/inloggen.go", l6_login_wa)
+	log.Println("Starting backend...")
+	log.Fatal(http.ListenAndServe(":8081", nil))
 }

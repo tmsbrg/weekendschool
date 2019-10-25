@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Rot13 | Gereedschap | Weekendschool Hacking Challenge</title>
+    <script>
+        function rot13(s) {
+            var out = "";
+            for (i=0; i < s.length; i++) {
+                var c = s.charCodeAt(i);
+                if (c >= 65 && c <= 90) {
+                    out += String.fromCharCode((c - 65 + 13) % 26 + 65);
+                } else if (c >= 97 && c <= 122) {
+                    out += String.fromCharCode((c - 97 + 13) % 26 + 97);
+                } else {
+                    out += s.charAt(i);
+                }
+            }
+            return out;
+        }
+        function encode() {
+            document.getElementById("uitvoer").value =
+                rot13(document.getElementById("invoer").value);
+        }
+    </script>
+</head>
+<body>
+
+<h1>Rot13 | Gereedschap | Weekendschool Hacking Challenge</h1>
+
+<p>Gebruik deze pagina om Rot13 te encoderen of decoderen.</p>
+
+<h2>Invoer</h2>
+<div><textarea id="invoer" cols="80" rows="10"></textarea></div>
+<div>
+    <input type="button" value="encoderen/decoderen" onclick="encode()">
+</div>
+<h2>Uitvoer</h2>
+<div><textarea id="uitvoer" cols="80" rows="10" readonly></textarea></div>
+</body>
+</html>
