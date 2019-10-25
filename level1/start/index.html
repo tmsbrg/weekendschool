@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Level 1 | Weekendschool Hacking Challenge</title>
+    <script>
+        function advance() {
+            var xhttp = new XMLHttpRequest();
+            var url = "/level2/" + document.getElementById("password").value + "/";
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        window.location.href = url + "#success";
+                    } else {
+                        alert("Wachtwoord is niet correct.")
+                    }
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+    </script>
+</head>
+<body>
+
+<h1>Level 1 | Weekendschool Hacking Challenge</h1>
+
+<h2>Wachtwoord</h2>
+<p>Voor hier het wachtwoord in om in te loggen voor level 2.</p>
+<!-- GSdAHka6tIgJrayasle42sFBOQ9Mir5h -->
+<form action="javascript:;" onsubmit="advance()">
+<input type="text" id="password" name="password">
+<input type="submit" value="Versturen">
+</form>
+
+</body>
+</html>
