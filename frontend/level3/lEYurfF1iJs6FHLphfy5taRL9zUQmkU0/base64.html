@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Base64 | Level 3 | Weekendschool Hacking Challenge</title>
+    <script>
+        function encode() {
+            document.getElementById("uitvoer").value =
+                btoa(document.getElementById("invoer").value);
+        }
+        function decode() {
+            document.getElementById("uitvoer").value =
+                atob(document.getElementById("invoer").value);
+        }
+    </script>
+</head>
+<body>
+
+<h1>Base64 | Level 3 | Weekendschool Hacking Challenge</h1>
+
+<p>Gebruik deze pagina om Base64 te encoderen of decoderen.</p>
+
+<h2>Invoer</h2>
+<div><textarea id="invoer" cols="40" rows="5"></textarea></div>
+<div>
+    <input type="button" value="encoderen" onclick="encode()">
+    <input type="button" value="decoderen" onclick="decode()">
+</div>
+<h2>Uitvoer</h2>
+<div><textarea id="uitvoer" cols="40" rows="5" readonly></textarea></div>
+</body>
+</html>
