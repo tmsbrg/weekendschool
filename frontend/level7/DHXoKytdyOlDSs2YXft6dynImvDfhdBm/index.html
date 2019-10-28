@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link href="/css/noty.css" rel="stylesheet">
     <link href="/css/noty.mint.css" rel="stylesheet">
+    <link href="keypad.css" rel="stylesheet">
     <script src="/js/noty.js" type="text/javascript"></script>
     <script>
         window.onload = function() {
@@ -35,6 +36,88 @@
             xhttp.open("GET", url, true);
             xhttp.send();
         }
+
+        function enterdigit(n) {
+            var code = document.getElementById("code");
+            if (code.value.length < code.attributes.maxlength.value) {
+                code.value += n
+            }
+        }
+
+        function deldigit(n) {
+            var code = document.getElementById("code");
+            if (code.value.length > 0) {
+                code.value = code.value.substring(0, code.value.length - 1)
+            }
+        }
+        function submitcode() {
+            var code = document.getElementById("code");
+            var xhttp = new XMLHttpRequest();
+            current_code = code.value;
+            var url = "code.go?code=" + code.value;
+            code.value = "";
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 502) {
+                        new Noty({
+                            type: "error",
+                            theme: "mint",
+                            text: "<strong>Error: Kan geen connectie maken tot backend.</strong>",
+                            timeout: 1500,
+                        }).show();
+                        return
+                    }
+                    if (this.status == 500) {
+                        new Noty({
+                            type: "error",
+                            theme: "mint",
+                            text: "<strong>Error: Interne error bij backend.</strong>",
+                            timeout: 1500,
+                        }).show();
+                        return
+                    }
+
+                    var audio = new Audio(URL.createObjectURL(this.response));
+                    audio.play();
+
+                    if (this.status == 200) {
+                        setTimeout(success_get_password, 5000);
+                    } else if (this.status == 403) {
+                        setTimeout(notify_failure, 5000);
+                    }
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.responseType = 'blob';
+            xhttp.send();
+        }
+        function success_get_password() {
+            new Noty({
+                type: "success",
+                theme: "mint",
+                text: "<strong>code is correct.</strong>",
+                timeout: 1500,
+            }).show();
+
+            var xhttp = new XMLHttpRequest();
+            var url = "getpassword.go?code=" + current_code;
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    alert("Wachtwoord voor Level 8: " + this.response)
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.responseType = "text"
+            xhttp.send();
+        }
+        function notify_failure() {
+            new Noty({
+                type: "warning",
+                theme: "mint",
+                text: "<strong>Code is niet correct.</strong>",
+                timeout: 1500,
+            }).show();
+        }
     </script>
 </head>
 <body>
@@ -45,13 +128,41 @@
 
 <div class="container">
 
-<h2>TODO</h2>
-<p>TODO</p>
+<h2>Keypad</h2>
+<!--
+    VE9ETzogT20gZWVuIG9mIGFuZGVyZSByZWRlbiBhY2NlcHRlZXJ0IGhldCBzeXN0ZWVtIGFsbGVl
+    biBjb2RlcyBtZXQgY2lqZmVycyAxLCAyLCA0IGVuIDUuIERpdCBtb2V0IHpvIHNuZWwgbW9nZWxp
+    amsgb3BnZWxvc3Qgd29yZGVuISBJayBoZWIgaW4gZGUgdHVzc2VudGlqZCBlZW4gY29kZSBpbmdl
+    c3RlbGQgZGllIGFsbGVlbiB1aXQgZGV6ZSBjaWpmZXJzIGJlc3RhYXQuIFNFQ1VSSVRZ
+-->
+<p>Voer hier uw beveiligde code in</p>
+<form>
+<p>Code: <input type="text" id="code" name="code" value="" maxlength="4" readonly></p>
+</form>
+<!-- keypad -->
+<container>
+    <block><button type="button" class="btn btn-primary" style="height: 100%;width:100%" onclick="enterdigit(3)"><h1>3<h1></button></block>
+    <block><button type="button" class="btn btn-primary" style="height: 100%;width:100%" onclick="enterdigit(2)"><h1>2<h1></button></block>
+    <block><button type="button" class="btn btn-primary" style="height: 100%;width:100%" onclick="enterdigit(1)"><h1>1<h1></button></block>
+
+    <block><button type="button" class="btn btn-primary" style="height: 100%;width:100%" onclick="enterdigit(6)"><h1>6<h1></button></block>
+    <block><button type="button" class="btn btn-primary" style="height: 100%;width:100%" onclick="enterdigit(5)"><h1>5<h1></button></block>
+    <block><button type="button" class="btn btn-primary" style="height: 100%;width:100%" onclick="enterdigit(4)"><h1>4<h1></button></block>
+
+    <block><button type="button" class="btn btn-primary" style="height: 100%;width:100%" onclick="enterdigit(9)"><h1>9<h1></button></block>
+    <block><button type="button" class="btn btn-primary" style="height: 100%;width:100%" onclick="enterdigit(8)"><h1>8<h1></button></block>
+    <block><button type="button" class="btn btn-primary" style="height: 100%;width:100%" onclick="enterdigit(7)"><h1>7<h1></button></block>
+
+    <block><button type="button" class="btn btn-success" style="height: 100%;width:100%" onclick="deldigit()"><h1>DEL<h1></button></block>
+    <block><button type="button" class="btn btn-success" style="height: 100%;width:100%" onclick="submitcode()"><h1>ENTER<h1></button></block>
+    <block><button type="button" class="btn btn-primary" style="height: 100%;width:100%" onclick="enterdigit(0)"><h1>0<h1></button></block>
+
+</container>
 <h2>Wachtwoord</h2>
 <p>Voer hier het wachtwoord in om in te loggen voor level 8.</p>
 <form action="javascript:;" onsubmit="advance()">
-<input type="text" id="password" name="password">
-<input type="submit" value="Versturen">
+<p><input type="text" id="password" name="password">
+<input type="submit" value="Versturen"></p>
 </form>
 
 </div></body>

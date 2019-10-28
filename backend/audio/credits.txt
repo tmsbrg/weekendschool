@@ -1,0 +1,19 @@
+Sounds from: https://opengameart.org/content/supertuxkart-sound-effects
+
+Made by Daniel "Scribe" Stephens (https://opengameart.org/users/scribe)
+
+Published Saturday, July 30, 2011 - 10:27
+
+License: CC0 (Creative Commons Public Domain): https://creativecommons.org/publicdomain/zero/1.0/
+
+---
+
+Edited by Thomas van der Berg using ffmpeg
+
+Taking sounds out of the original mp3:
+
+    ffmpeg -i 'sfx kart game_0.mp3' -ss 00:00.20 -to 00:00.55 -codec copy beepfast.mp3
+
+Concatenating the sounds:
+
+    ffmpeg -f concat -safe 0 -i <(yes "file '$PWD/beep.mp3'" | head -2;yes "file '$PWD/beepfast.mp3'" | head -2) -codec copy 1100.mp3

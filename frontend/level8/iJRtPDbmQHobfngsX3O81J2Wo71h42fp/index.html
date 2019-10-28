@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Level X | Weekendschool Hacking Challenge</title>
+    <title>Level 8 | Weekendschool Hacking Challenge</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link href="/css/noty.css" rel="stylesheet">
     <link href="/css/noty.mint.css" rel="stylesheet">
@@ -22,7 +22,7 @@
 
         function advance() {
             var xhttp = new XMLHttpRequest();
-            var url = "/levelY/" + document.getElementById("password").value + "/";
+            var url = "/level9/" + document.getElementById("password").value + "/";
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4) {
                     if (this.status == 200) {
@@ -40,7 +40,7 @@
 <body>
 
 <div class="jumbotron"><div class="container">
-<h1>Level X | Weekendschool Hacking Challenge</h1>
+<h1>Level 8 | Weekendschool Hacking Challenge</h1>
 </div></div>
 
 <div class="container">
@@ -48,7 +48,7 @@
 <h2>TODO</h2>
 <p>TODO</p>
 <h2>Wachtwoord</h2>
-<p>Voer hier het wachtwoord in om in te loggen voor level Y.</p>
+<p>Voer hier het wachtwoord in om in te loggen voor level 9.</p>
 <form action="javascript:;" onsubmit="advance()">
 <input type="text" id="password" name="password">
 <input type="submit" value="Versturen">

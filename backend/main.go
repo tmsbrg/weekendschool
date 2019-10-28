@@ -7,6 +7,10 @@ import (
 	"strconv"
 	"crypto/rand"
 	"encoding/hex"
+	"io"
+	"bytes"
+
+	"github.com/gobuffalo/packr"
 )
 
 func l4_login_thompson(w http.ResponseWriter, r *http.Request) {
@@ -99,17 +103,86 @@ func l6_wa(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+var l7_audio packr.Box
+
+var l7_code_secret = "1442"
+
+func l7_checkcode(code string) (num_digits_correct int) {
+	num_digits_correct = 0
+	if len(code) != len(l7_code_secret) {
+		return
+	}
+	for i := 0; i < 4; i++ {
+		if (l7_code_secret[i] == code[i]) {
+			num_digits_correct++
+		}
+	}
+	return
+}
+
+func l7_getpassword(w http.ResponseWriter, r *http.Request) {
+	code := r.FormValue("code")
+	if code == l7_code_secret {
+		fmt.Fprint(w, "iJRtPDbmQHobfngsX3O81J2Wo71h42fp")
+	} else {
+		http.Error(w, "Wrong keycode", 403)
+	}
+}
+
+func l7_code(w http.ResponseWriter, r *http.Request) {
+	code := r.FormValue("code")
+	num_digits_correct := l7_checkcode(code)
+
+	var audiofile string
+	if num_digits_correct == 0 {
+		audiofile = "./0000.mp3"
+	} else if num_digits_correct == 1 {
+		audiofile = "./1000.mp3"
+	} else if num_digits_correct == 2 {
+		audiofile = "./1100.mp3"
+	} else if num_digits_correct == 3 {
+		audiofile = "./1110.mp3"
+	} else if num_digits_correct == 4 {
+		audiofile = "./1111.mp3"
+	}
+
+	audio, err := l7_audio.Find(audiofile)
+	if err != nil {
+		log.Println("Error: can't open audio:", err)
+		http.Error(w, "Internal error", 500)
+		return
+	}
+
+	w.Header().Set("Content-Type", "audio/mpeg")
+
+	if num_digits_correct == 4 {
+		w.WriteHeader(200)
+	} else {
+		w.WriteHeader(403)
+	}
+
+	io.Copy(w, bytes.NewReader(audio))
+}
+
 func main() {
+
+	http.HandleFunc("/level4/MHjgkjTp0APwXa50BnqItTJ36EHdLjkU/login.go", l4_login_thompson)
+
+	http.HandleFunc("/level5/aWV2NNllDyktjkwlIfvu53jIBmIocRSb/viewprofile.go", l5_viewprofile)
+
 	l6logins = []l6Login{
 		l6Login{"ghoning", "prog50%", getSessionId(), "Dit profiel heeft nog geen data.", "prog50%, gerard123"},
 		l6Login{"tmsbrg", "password123", getSessionId(), "Maker van de hacking challenge", "password123, koelkast88"},
 		l6Login{"jb", "jb", getSessionId(), "Just in", "jb, nietradenalstublieft"},
 		l6Login{"admin", "admin", getSessionId(), "Administrator voor Level 6", "admin, DHXoKytdyOlDSs2YXft6dynImvDfhdBm"},
 	}
-	http.HandleFunc("/level4/MHjgkjTp0APwXa50BnqItTJ36EHdLjkU/login.go", l4_login_thompson)
-	http.HandleFunc("/level5/aWV2NNllDyktjkwlIfvu53jIBmIocRSb/viewprofile.go", l5_viewprofile)
 	http.HandleFunc("/level6/vvJBa5GqajeBGhyUczJVPIYyOtlWtTd3/inloggen.go", l6_login_wa)
 	http.HandleFunc("/level6/vvJBa5GqajeBGhyUczJVPIYyOtlWtTd3/wa.go", l6_wa)
+
+	l7_audio = packr.NewBox("./audio")
+	http.HandleFunc("/level7/DHXoKytdyOlDSs2YXft6dynImvDfhdBm/code.go", l7_code)
+	http.HandleFunc("/level7/DHXoKytdyOlDSs2YXft6dynImvDfhdBm/getpassword.go", l7_getpassword)
+
 	log.Println("Starting backend...")
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }
