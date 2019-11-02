@@ -1,0 +1,13 @@
+[Unit]
+Description=Weekendschool backend
+After=network.target
+
+[Service]
+Type=simple
+User=weekend
+Group=weekend
+WorkingDirectory=/var/www/weekendschool/backend
+ExecStart=/var/www/weekendschool/backend/backend
+
+[Install]
+WantedBy=multi-user.target
