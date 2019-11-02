@@ -115,6 +115,8 @@ func l7_checkcode(code string) (num_digits_correct int) {
 	for i := 0; i < 4; i++ {
 		if (l7_code_secret[i] == code[i]) {
 			num_digits_correct++
+		} else {
+			return
 		}
 	}
 	return
@@ -123,7 +125,7 @@ func l7_checkcode(code string) (num_digits_correct int) {
 func l7_getpassword(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 	if code == l7_code_secret {
-		fmt.Fprint(w, "iJRtPDbmQHobfngsX3O81J2Wo71h42fp")
+		fmt.Fprint(w, "U3N2kWycdLiugOrRcxzkApMU1Y5LnYhs")
 	} else {
 		http.Error(w, "Wrong keycode", 403)
 	}

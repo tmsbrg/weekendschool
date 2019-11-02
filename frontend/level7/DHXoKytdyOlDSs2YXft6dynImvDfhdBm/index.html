@@ -15,7 +15,7 @@
                 new Noty({
                     type: "success",
                     theme: "mint",
-                    text: "<strong>Gelukt!</strong>",
+                    text: "<strong>Gelukt! Dit is het laatste level!</strong>",
                 }).show();
                 window.location.hash = "";
             }
@@ -23,7 +23,7 @@
 
         function advance() {
             var xhttp = new XMLHttpRequest();
-            var url = "/level8/" + document.getElementById("password").value + "/";
+            var url = "/gewonnen/" + document.getElementById("password").value + "/";
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4) {
                     if (this.status == 200) {
@@ -128,6 +128,8 @@
 
 <div class="container">
 
+<h2>Laatste level</h2>
+<p>Dit is het laatste level van de hacking challenge! Succes!</p>
 <h2>Keypad</h2>
 <!--
     VE9ETzogT20gZWVuIG9mIGFuZGVyZSByZWRlbiBhY2NlcHRlZXJ0IGhldCBzeXN0ZWVtIGFsbGVl
@@ -159,7 +161,7 @@
 
 </container>
 <h2>Wachtwoord</h2>
-<p>Voer hier het wachtwoord in om in te loggen voor level 8.</p>
+<p>Voer hier het laatste wachtwoord in om de challenge te winnen!</p>
 <form action="javascript:;" onsubmit="advance()">
 <p><input type="text" id="password" name="password">
 <input type="submit" value="Versturen"></p>
