@@ -1,0 +1,39 @@
+user                            www;
+worker_processes                auto; # it will be determinate automatically by the number of core
+pid                             /run/nginx.pid;
+
+error_log                       /var/log/nginx/error.log warn;
+
+events {
+    worker_connections          1024;
+}
+
+http {
+    include                     /etc/nginx/mime.types;
+    default_type                application/octet-stream;
+    sendfile                    on;
+    access_log                  /var/log/nginx/access.log;
+    keepalive_timeout           3000;
+    server {
+        listen                  5000 default_server;
+        root                    /var/www/weekendschool/frontend;
+        index                   index.html;
+        server_name             _;
+        client_max_body_size    32m;
+        error_page              500 502 503 504  /50x.html;
+        location = /50x.html {
+              root              /var/lib/nginx/html;
+        }
+        location ~ /\. {
+            deny all;
+            access_log off;
+            log_not_found off;
+        }
+        location ~ \.go$ {
+            proxy_pass http://127.0.0.1:8081;
+        }
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+}
